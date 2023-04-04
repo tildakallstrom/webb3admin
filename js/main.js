@@ -1,6 +1,4 @@
-//RÖR EJ
 "use strict";
-//courses:
 let coursesEl = document.getElementById("courses");
 let createbtn = document.getElementById("create");
 let coursenameInput = document.getElementById("coursename");
@@ -8,8 +6,6 @@ let schoolInput = document.getElementById("school");
 let startsInput = document.getElementById("starts");
 let stopsInput = document.getElementById("stops");
 
-
-//works:
 let worksEl = document.getElementById("works");
 let createworkbtn = document.getElementById("createWork");
 let workplaceInput = document.getElementById("workplace");
@@ -20,7 +16,6 @@ let descriptionworkInput = document.getElementById("descriptionwork");
 let startInput = document.getElementById("start");
 let stopInput = document.getElementById("stop");
 
-//wwebsites:
 let websitesEl = document.getElementById("websites");
 let createwebsitebtn = document.getElementById("createWebsite");
 let websiteTitleInput = document.getElementById("websiteTitle");
@@ -28,44 +23,30 @@ let descriptionInput = document.getElementById("description");
 let urlInput = document.getElementById("url");
 let imageInput = document.getElementById("image");
 
-
-
-//händelselyssnare
 window.addEventListener('load', getCourses);
-//skapa-knapp
 createbtn.addEventListener('click', function(e) {
     e.preventDefault();
     create();
 });
 
-//works
 window.addEventListener('load', getWorks);
-//skapa-knapp
 createworkbtn.addEventListener('click', function(e) {
     e.preventDefault();
     createWork();
 });
 
-//websites
 window.addEventListener('load', getWebsites);
-//skapa-knapp
 createwebsitebtn.addEventListener('click', function(e) {
     e.preventDefault();
     createWebsite();
 });
 
-
-
-//Funktioner
-//hämta kurser
 function getCourses() {
-    //töm
     coursesEl.innerHTML = '';
     fetch('https://studenter.miun.se/~tika1900/writeable/webbtjansten/courses.php')
     .then(response => response.json())
     .then(data =>  {
         data.forEach(course => {
-            //skriv ut courses
             coursesEl.innerHTML += 
             `
             <tr class="courses">
@@ -79,12 +60,11 @@ function getCourses() {
              <button id="course${course.id}" onClick="getCourse('${course.id}', '${course.coursename}', '${course.school}', '${course.start}', '${course.stop}')" class="btninform">Uppdatera</button>
              </td>
              </tr>
-`    
+` 
         })
     })
     
 }
-
 
 function getCourse(id, coursename, school, start, stop) {
  let element = document.getElementById("updateform");
@@ -113,20 +93,14 @@ function getCourse(id, coursename, school, start, stop) {
             </form>
        
 ` 
-
 let updatebtn = document.getElementById("update");
 updatebtn.addEventListener('click', function(e) {
     e.preventDefault();
     updateCourse();
-   // e.target.closest("form").reset();
 });  
-
 }
 
-
-//uppdatera kurs
 function updateCourse() {
-    //let id = id;
      let course = {'id': courseidUpdate.value, 'coursename': coursenameUpdate.value, 'school': schoolUpdate.value, 'start': startsUpdate.value, 'stop': stopsUpdate.value};
      fetch('https://studenter.miun.se/~tika1900/writeable/webbtjansten/courses.php?id=' + courseidUpdate.value, {
         method: 'PUT',
@@ -142,15 +116,10 @@ function updateCourse() {
     .catch(error => {
         console.log('Error: ', error);
     })
-  //  location.reload();
     }
     
-    
-
-//funktion för att radera enskild kurs
 function deleteCourse(id) {
     fetch('https://studenter.miun.se/~tika1900/writeable/webbtjansten/courses.php?id=' + id, {
-        //metoden delete för att kunna radera från webbtjänst
         method: 'DELETE',
     })
     .then(response => response.json())
@@ -162,33 +131,25 @@ function deleteCourse(id) {
 })
 }
 
-    //funktion för att lägga till en kurs via formulär
     function create() {
-        //variabler
         let coursename = coursenameInput.value;
         let school = schoolInput.value;
         let start = startsInput.value;
         let stop = stopsInput.value;
-        //kursen
         let course = {'coursename': coursename, 'school': school, 'start': start, 'stop': stop}; 
-        //fetch kurser 
     fetch('https://studenter.miun.se/~tika1900/writeable/webbtjansten/courses.php', {
-        //metod post för att kunna posta till webbtjänst
     method: 'POST',
     body: JSON.stringify(course),
 })
 
 .catch(error => {
     console.log('Error: ', error);
-}) //nedan skrivs igen för att sidan ska laddas om och hämta kurser på nytt efter att en kurs har skapats
+}) 
 .then(data => {
     getCourses();
 })
 }
 
-
-
-//works
 function getWorks() {
     worksEl.innerHTML = '';
     fetch('https://studenter.miun.se/~tika1900/writeable/webbtjansten/workplaces.php')
@@ -216,9 +177,8 @@ function getWorks() {
     })
     
 }
-//funktion för att lägga till ett arbete via formulär
+
 function createWork() {
-    //variabler
     let workplace = workplaceInput.value;
     let title = titleInput.value;
     let city = cityInput.value;
@@ -226,25 +186,21 @@ function createWork() {
     let descriptionwork = descriptionworkInput.value;
     let start = startInput.value;
     let stop = stopInput.value;
-    //arbete
     let work = {'workplace': workplace, 'title': title, 'city': city, 'country': country, 'description': descriptionwork, 'start': start, 'stop': stop}; 
-    //fetch kurser 
 fetch('https://studenter.miun.se/~tika1900/writeable/webbtjansten/workplaces.php', {
-    //metod post för att kunna posta till webbtjänst
 method: 'POST',
 body: JSON.stringify(work),
 })
 
 .catch(error => {
 console.log('Error: ', error);
-}) //nedan skrivs igen för att sidan ska laddas om och hämta kurser på nytt efter att en kurs har skapats
+}) 
 .then(data => {
 getWorks();
 })
 }
-//hämta ett arbete
+
 function getWork(id, workplace, title, city, country, descriptionwork, start, stop) {
-   
     let element = document.getElementById("updateformwork");
                element.innerHTML = 
                `
@@ -285,18 +241,14 @@ function getWork(id, workplace, title, city, country, descriptionwork, start, st
                </form>
           
    ` 
-   
    let updatebtn = document.getElementById("updatework");
    updatebtn.addEventListener('click', function(e) {
        e.preventDefault();
        updateWork();
-      // e.target.closest("form").reset();
-     // location.reload();
    });  
    }
    
 function updateWork() {
-
      let work = {'id': workidUpdate.value,'workplace': workplaceUpdate.value, 'title': titleUpdate.value, 'city': cityUpdate.value, 'country': countryUpdate.value, 'description': descriptionworkUpdate.value, 'start': startUpdate.value, 'stop': stopUpdate.value};
      fetch('https://studenter.miun.se/~tika1900/writeable/webbtjansten/workplaces.php?id=' + workidUpdate.value, {
         method: 'PUT',
@@ -313,13 +265,8 @@ function updateWork() {
     .then(data => {
         getWorks();
     })
-   // location.reload();
     }
-    
-    
-    
-
-//funktion för att radera enskilt arbete
+     
 function deleteWork(id) {
     fetch('https://studenter.miun.se/~tika1900/writeable/webbtjansten/workplaces.php?id=' + id, {
         method: 'DELETE',
@@ -333,9 +280,6 @@ function deleteWork(id) {
 })
 }
 
-
-//websites
-//hämta webbplatser
 function getWebsites() {
     websitesEl.innerHTML = '';
     fetch('https://studenter.miun.se/~tika1900/writeable/webbtjansten/websites.php')
@@ -399,14 +343,9 @@ let updatewebsitebtn = document.getElementById("updatewebsite");
 updatewebsitebtn.addEventListener('click', function(e) {
     e.preventDefault();
     updateWebsite();
-   // e.target.closest("form").reset();
-  // location.reload();
 });  
-
 }
 
-
-//uppdatera webbplats
 function updateWebsite() {
      let website = {'id': websiteidUpdate.value, 'title': websiteTitleUpdate.value, 'description': descriptionUpdate.value, 'url': urlUpdate.value, 'image': imageUpdate.value};
      fetch('https://studenter.miun.se/~tika1900/writeable/webbtjansten/websites.php?id=' + websiteidUpdate.value, {
@@ -423,15 +362,10 @@ function updateWebsite() {
     .catch(error => {
         console.log('Error: ', error);
     })
-    //location.reload();
     }
     
-    
-
-//funktion för att radera enskild kurs
 function deleteWebsite(id) {
     fetch('https://studenter.miun.se/~tika1900/writeable/webbtjansten/websites.php?id=' + id, {
-        //metoden delete för att kunna radera från webbtjänst
         method: 'DELETE',
     })
     .then(response => response.json())
@@ -443,8 +377,6 @@ function deleteWebsite(id) {
 })
 }
 
-//välj bild
-//emptybild
 function getImgEmpty() {
     imageInput.value = "empty";
    }
@@ -481,30 +413,21 @@ function getImgEmpty() {
     imageInput.value = "vikens";
    }
 
-
-
-
-    //funktion för att lägga till en webbplats via formulär
     function createWebsite() {
-        //variabler
         let websiteTitle = websiteTitleInput.value;
         let description = descriptionInput.value;
         let url = urlInput.value;
         let image = imageInput.value;
-        //webbplatsen
         let website = {'title': websiteTitle, 'description': description, 'url': url, 'image': image}; 
-        //fetch kurser 
     fetch('https://studenter.miun.se/~tika1900/writeable/webbtjansten/websites.php', {
-        //metod post för att kunna posta till webbtjänst
     method: 'POST',
     body: JSON.stringify(website),
 })
 
 .catch(error => {
     console.log('Error: ', error);
-}) //nedan skrivs för att sidan ska laddas om och hämta webbplatser på nytt efter att en webbplats har skapats
+}) 
 .then(data => {
     getWebsites();
 })
 }
-
